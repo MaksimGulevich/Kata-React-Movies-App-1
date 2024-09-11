@@ -1,0 +1,73 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+        "ecmaVersion": 2021,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "requireConfigFile": false
+    },
+    "extends": [
+      "airbnb",
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:prettier/recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings"
+    ],
+    "plugins": [
+        "react",
+        "import",
+        "prettier"
+    ],
+    "rules": {
+      "indent": ["error", 2, { "SwitchCase": 1 }],
+      "prettier/prettier": ["error", { 
+        "parser": "flow",
+        "semi": false}], 
+      "linebreak-style": [0, "unix"],
+      "quotes": ["error", "single"],
+      "semi": ["error", "never"],
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": 0,
+      "import/no-unresolved": [2, { "caseSensitive": false }],
+      "react/jsx-props-no-spreading": "off",
+      "jsx-a11y/no-autofocus": "off",
+      "react/require-default-props": "off",
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+      "import/order": [
+        2,
+        {
+          "groups": [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index"
+          ],
+          "newlines-between": "always"
+        }
+      ]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"  // Автоматически определять версию React
+        },
+      "import/resolver": {
+        "node": {
+          "extensions": [".js", ".jsx", ".ts", ".tsx"],
+          "moduleDirectory": ["node_modules", "src/"]
+        }
+      }
+    }
+}
+
+
+
+
