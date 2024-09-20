@@ -8,13 +8,14 @@ const options = {
 }
 
 export default class GetMovie {
-  constructor(query) {
+  constructor(query, page) {
     this.query = query
+    this.page = page
   }
 
   async getResource() {
     const res = await fetch(
-      `https://api.themoviedb.org/3/search/movie?query=${this.query}&include_adult=false&language=en-US&page=1`,
+      `https://api.themoviedb.org/3/search/movie?query=${this.query}&include_adult=false&language=en-US&page=${this.page}`,
       options
     )
     const body = await res.json()

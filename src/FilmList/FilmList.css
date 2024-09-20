@@ -1,12 +1,17 @@
 .filmList {
     box-sizing: border-box;
     margin: auto;
-    padding: 32px;
     display: grid;
     grid-template-columns: 451px 451px;
     grid-template-rows: 279px 279px;
     gap: 36px;
-    width: 1010px;
-    /* height: 1147px; */
     background-color: #FFFFFF;
+}
+
+.filmList_block {
+    display: block;
+}
+
+.alert{
+    font-size: 24px;
 }

@@ -3,4 +3,20 @@ body {
     padding: 0;
     background-color: #F7F7F7;
   }
+
+.main {
+  box-sizing: border-box;
+  margin: auto;
+  padding: 32px;
+  width: 1010px;
+  min-height: 100vh;
+  background-color: #FFFFFF;
+  }
   
+  .pagination {
+    margin-top: 32px;
+  }
+
+  .pagination_none {
+    display: none;
+  }
