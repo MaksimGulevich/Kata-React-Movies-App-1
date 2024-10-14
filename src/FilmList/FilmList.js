@@ -9,11 +9,7 @@ function FilmList({ children }) {
   }
   return (
     <div className={clazzName}>
-      {!children ? (
-        <Alert className="alert" message="К сожалению по вашему запросу ничего не найдено=(" type="info" />
-      ) : (
-        children
-      )}
+      {!children ? <Alert className="alert" message="К сожалению, ничего не удалось найти=(" type="info" /> : children}
     </div>
   )
 }

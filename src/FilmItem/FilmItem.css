@@ -1,43 +1,231 @@
-.card {
-    display: flex;
-    height: 281px;
-    font-size: 12px;
-    box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
+@media screen and (min-width: 1010px) {
+    .card {
+        position: relative;
+        display: grid;
+        grid-template-areas: 
+            "img info"
+            "img desc";
+        grid-template-columns: 183px 248px ;
+        grid-template-rows: 1fr 3fr;
+        gap: 0 20px;
+        height: 281px;
+        font-size: 12px;
+        box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+    }
+    
+    .card__information {
+        position: relative;
+        grid-area: info;
+        width: 228px;
+    }
+    
+    .card__description_and_rate {
+        grid-area: desc;
+        margin-right: 32px;
+    }
+
+    .card__imgbox {
+        grid-area: img;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .card__img{
+        display: block;
+        width: 183px;
+        height: 281px; 
+    }
+    
+    .card__title {
+        margin-top: 12px;
+        margin-bottom: 7px;
+        width: 200px;
+        font-size: 20px;
+    }
+    
+    .card__date {
+        margin:0;
+        margin-bottom: 7px;
+        color:#827E7E;
+    }
+    
+    .card__genre {
+        align-content:center;
+        display: inline-block;
+        height: 20px;
+        margin: 0;
+        margin-bottom: 7px;
+        margin-right: 5px;
+        padding: 0 5px;
+        border: 1px solid #D9D9D9;
+        background-color: #FAFAFA;
+        border-radius: 2px;
+        color: rgba(0, 0, 0, 0.65);
+    }
+    
+    .card__description {
+        margin: 0;
+        margin-bottom: 10px;
+    }
+    
+    .card__rate {
+        position: absolute;
+        margin-bottom: 16px;
+        bottom: 0px;
+        font-size: 15px;
+    }
+    
+    .card__circle {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        display: block;
+        border: 2px solid;
+        border-radius: 50%;
+    }
+    
+    .red{
+        border-color: #E90000;
+    }
+    
+    .orange{
+        border-color: #E97E00;
+    }
+    
+    .yellow{
+        border-color: #E9D100;
+    }
+    
+    .green{
+        border-color: #66E900;
+    }
+    
+    .card__ratenumber {
+        font-size: 14px;
+        position: absolute;
+        top: 7px;
+        right: 6px;
+    }
 }
 
-.card__information {
-    margin: 16px;
-    width: 228px;
-}
+@media screen and (max-width: 1010px)  {
+    .card {
+        position: relative;
+        display: grid;
+        grid-template-areas: 
+            "img info"
+            "desc desc";
+        grid-template-columns: minmax(101px, 120px) 1fr ;
+        gap: 0 18px;
+        height: 245px;
+        font-size: 12px;
+        box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+    }
+    
+    .card__information {
+        position: relative;
+        grid-area: info;
+        margin: 0px;
+        min-width: 228px;
+    }
+    
+    .card__description_and_rate {
+        grid-area: desc;
+        margin-right: 16px;
+        margin-left: 16px;
+        margin-bottom: 16px;
+    }
 
-.card__imgbox {
-    width: 183px;
-    height: 281px; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.card__img{
-    display: block;
-    width: 183px;
-    height: 281px; 
-}
-
-.card__title {
-    font-size: 20px;
-}
-
-.card__date {
-    color:#827E7E;
-}
-
-.card__genre {
-    display: inline-block;
-    margin-right: 5px;
-    padding: 0 5px;
-    border: 1px solid #D9D9D9;
-    background-color: #FAFAFA;
-    border-radius: 2px;
+    .card__imgbox {
+        grid-area: img;
+        margin-top: 6px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        display: flex;
+    }
+    
+    .card__img{
+        display: block;
+        min-width: 60px;
+        min-height: 91px; 
+    }
+    
+    .card__title {
+        margin-top: 6px;
+        margin-bottom: 7px;
+        margin-right: 45px;
+        min-width: 200px;
+        font-size: 20px;
+    }
+    
+    .card__date {
+        margin:0;
+        margin-bottom: 7px;
+        color:#827E7E;
+    }
+    
+    .card__genre {
+        display: inline-block;
+        align-content: center;
+        height: 20px;
+        margin: 0;
+        margin-bottom: 7px;
+        margin-right: 5px;
+        padding: 0 5px;
+        border: 1px solid #D9D9D9;
+        background-color: #FAFAFA;
+        border-radius: 2px;
+        color: rgba(0, 0, 0, 0.65);
+    }
+    
+    .card__description {
+        margin: 0;
+        margin-bottom: 10px;
+    }
+    
+    .card__rate {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        font-size: 15px;
+    }
+    
+    .card__circle {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        display: block;
+        border: 2px solid;
+        border-radius: 50%;
+    }
+    
+    .red{
+        border-color: #E90000;
+    }
+    
+    .orange{
+        border-color: #E97E00;
+    }
+    
+    .yellow{
+        border-color: #E9D100;
+    }
+    
+    .green{
+        border-color: #66E900;
+    }
+    
+    .card__ratenumber {
+        font-size: 14px;
+        position: absolute;
+        top: 7px;
+        right: 7px;
+    }
 }

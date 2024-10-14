@@ -1,0 +1,48 @@
+.buttons {
+    padding: 0;
+    display: flex;
+    list-style-type: none;    
+}
+
+.button {
+    padding: 0;
+    background:none;
+    border: none;
+    font-size: 14px;
+    color: #000000;
+}
+
+.buttons li:first-child {
+    margin-right: auto;
+}
+
+.selected {
+    color: #1890FF;
+}
+
+.button_box {
+    position: relative;
+    margin: auto;
+    width: 120px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #D9D9D9;
+}
+
+.trans {
+    
+    width: 60px;
+    height: 2px;
+    color: #1890FF;
+    background-color: #1890FF;
+}
+
+.transL{
+    transition:all 1s ease-in-out;
+    transform: translate(0px);
+}
+
+.transR{
+    transition:all 1s ease-in-out;
+    transform: translate(60px);
+}
+

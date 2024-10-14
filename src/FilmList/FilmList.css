@@ -1,17 +1,39 @@
-.filmList {
-    box-sizing: border-box;
-    margin: auto;
-    display: grid;
-    grid-template-columns: 451px 451px;
-    grid-template-rows: 279px 279px;
-    gap: 36px;
-    background-color: #FFFFFF;
+@media screen and (min-width: 1010px) {
+    .filmList {
+        box-sizing: border-box;
+        margin: auto;
+        display: grid;
+        grid-template-columns: 451px 451px;
+        grid-template-rows: 279px 279px;
+        gap: 36px;
+        background-color: #FFFFFF;
+    }
+
+    .filmList_block {
+        display: block;
+    }
+
+    .alert{
+        font-size: 24px;
+    }
 }
 
-.filmList_block {
-    display: block;
-}
-
-.alert{
-    font-size: 24px;
+@media screen and (max-width: 1010px)  {
+    .filmList {
+        box-sizing: border-box;
+        justify-content: center;
+        display: grid;
+        grid-template-columns: minmax(388px, 1010px);
+        grid-template-rows: minmax(245px, 279px);
+        gap: 16px;
+        background-color: #FFFFFF;
+    }
+    
+    .filmList_block {
+        display: block;
+    }
+    
+    .alert{
+        font-size: 24px;
+    }
 }

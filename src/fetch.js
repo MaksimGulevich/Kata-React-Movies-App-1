@@ -9,6 +9,7 @@ const options = {
 
 export default class GetMovie {
   constructor(query, page) {
+    this.url = 'https://api.themoviedb.org'
     this.query = query
     this.page = page
   }
@@ -23,11 +24,6 @@ export default class GetMovie {
   }
 
   // Получение массива жанров
-  // async getGenre() {
-  //   const res = await fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options)
-  //   const body = await res.json()
-  //   return body
-  // }
 
   getOriginalTitle() {
     this.getResource().then((body) => body.results.forEach((item) => console.log(item.original_title)))
