@@ -15,14 +15,14 @@ export default class GetGuestSession {
   async getSessionId() {
     if (!localStorage.getItem('sessionId')) {
       const res = await fetch('https://api.themoviedb.org/3/authentication/guest_session/new', options)
-      console.log(res)
+      // console.log(res)
       const response = await res.json()
       const sessionId = await response.guest_session_id
       localStorage.setItem('sessionId', sessionId)
       const dateCreation = new Date().getTime()
       localStorage.setItem('timeCreation', dateCreation)
       this.sessionId = sessionId
-      console.log('Если нет ID')
+      // console.log('Если нет ID')
       return this.sessionId
     }
     const currentDate = new Date().getTime()
@@ -33,11 +33,11 @@ export default class GetGuestSession {
       const sessionId = await response.guest_session_id
       localStorage.setItem('timeCreation', currentDate)
       localStorage.setItem('sessionId', sessionId)
-      console.log('Если есть, но он истек ID')
+      // console.log('Если есть, но он истек ID')
       this.sessionId = sessionId
       return this.sessionId
     }
-    console.log('Если есть ID')
+    // console.log('Если есть ID')
     this.sessionId = localStorage.getItem('sessionId')
     return this.sessionId
   }

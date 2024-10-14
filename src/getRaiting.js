@@ -14,6 +14,5 @@ export default async function getRaited(id, value) {
     options
   )
     .then((response) => response.json())
-    .then((response) => console.log(response))
     .catch((err) => console.error(err))
 }

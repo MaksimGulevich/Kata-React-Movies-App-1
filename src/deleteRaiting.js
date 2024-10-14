@@ -13,6 +13,5 @@ export default async function deleteRaited(id) {
     options
   )
     .then((response) => response.json())
-    .then((response) => console.log(response))
     .catch((err) => console.error(err))
 }
