@@ -114,7 +114,7 @@ function App() {
           ),
           id: element.id,
           date: element.release_date,
-          title: element.original_title,
+          title: cutString(element.original_title, 60),
           overview: cutString(element.overview, 150),
           poster: element.poster_path,
           loading: true,
@@ -197,7 +197,7 @@ function App() {
       optionssss
     )
       .then((response) => {
-        if (response.status === 404) {
+        if (response.status >= 400 && response.status <= 499) {
           console.log('Извините, избранных фильмов не найдено!')
           return []
         }
@@ -219,7 +219,7 @@ function App() {
             rating: element.rating,
             id: element.id,
             date: element.release_date,
-            title: element.original_title,
+            title: cutString(element.original_title, 40),
             overview: cutString(element.overview, 150),
             poster: element.poster_path,
             loading: true,
@@ -227,7 +227,7 @@ function App() {
           setRaitedFilm(newRaited)
         }
       })
-      .catch((err) => console.error('Ошибка при получении данных:', err))
+      .catch((err) => console.log('Ошибка при получении данных:', err))
   }, [
     // raitedFilm,
     currentRaited,
