@@ -1,18 +1,13 @@
-import React, {
-  useContext,
-  useState,
-  // , useEffect
-} from 'react'
+import React, { useContext, useState } from 'react'
+import PropTypes from 'prop-types'
 import { format, parseISO } from 'date-fns'
 import { Spin, Alert, Rate } from 'antd'
 
 import './FilmItem.css'
 import MyContext from '../MyContext'
-// import getGenre from '../getGenre'
 
 function FilmItem({ genre, title, overview, date, poster, rated, rating, onGetRaiting }) {
   const [isLoaded, setLoadImg] = useState(false)
-  // const [genrus, setGenrus] = useState([])
   const { genrus } = useContext(MyContext)
   const handleImgLoad = () => {
     setLoadImg(true)
@@ -85,3 +80,14 @@ function FilmItem({ genre, title, overview, date, poster, rated, rating, onGetRa
 }
 
 export default FilmItem
+
+FilmItem.propTypes = {
+  genre: PropTypes.arrayOf(PropTypes.number),
+  title: PropTypes.string,
+  overview: PropTypes.string,
+  date: PropTypes.string,
+  poster: PropTypes.string,
+  rated: PropTypes.string,
+  rating: PropTypes.number,
+  onGetRaiting: PropTypes.func,
+}

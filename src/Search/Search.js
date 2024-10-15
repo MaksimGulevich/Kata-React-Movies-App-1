@@ -1,5 +1,6 @@
 import React from 'react'
 import './Search.css'
+import PropTypes from 'prop-types'
 
 function Search({ onChange }) {
   const onChanges = (event) => {
@@ -9,3 +10,7 @@ function Search({ onChange }) {
 }
 
 export default Search
+
+Search.propTypes = {
+  onChange: PropTypes.func,
+}

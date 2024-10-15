@@ -1,6 +1,7 @@
 import React from 'react'
 import './FilmList.css'
 import { Alert } from 'antd'
+import PropTypes from 'prop-types'
 
 function FilmList({ children }) {
   let clazzName = 'filmList'
@@ -15,3 +16,7 @@ function FilmList({ children }) {
 }
 
 export default FilmList
+
+FilmList.propTypes = {
+  children: PropTypes.node,
+}

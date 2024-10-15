@@ -1,5 +1,6 @@
 import React from 'react'
 import './ButtonsSearchRaited.css'
+import PropTypes from 'prop-types'
 
 export default function ButtonsSearchRaited({ onSearh, onRaited, isFilter }) {
   const button = [
@@ -42,4 +43,10 @@ export default function ButtonsSearchRaited({ onSearh, onRaited, isFilter }) {
       <div className={`trans ${dinamicClass}`} />
     </div>
   )
+}
+
+ButtonsSearchRaited.propTypes = {
+  onSearh: PropTypes.func.isRequired,
+  onRaited: PropTypes.func.isRequired,
+  isFilter: PropTypes.string.isRequired,
 }

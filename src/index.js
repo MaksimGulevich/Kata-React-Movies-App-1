@@ -7,13 +7,14 @@ import MyContext from './MyContext'
 import './index.css'
 import FilmItem from './FilmItem/FilmItem'
 import FilmList from './FilmList/FilmList'
-import GetMovie from './fetch'
+import GetMovie from './Utilites/fetch'
 import Search from './Search/Search'
-import GetGuestSession from './gestSession'
+import GetGuestSession from './Utilites/gestSession'
 import ButtonsSearchRaited from './ButtonsSearchRaited/ButtonsSearchRaited'
-import getRaited from './getRaiting'
-import deleteRaited from './deleteRaiting'
-import getGenre from './getGenre'
+import getRaited from './Utilites/getRaiting'
+import deleteRaited from './Utilites/deleteRaiting'
+import getGenre from './Utilites/getGenre'
+import getRatedFilm from './Utilites/getRatedFilm'
 
 window.addEventListener('load', () => {
   const handleNetworkChange = () => {
@@ -182,30 +183,7 @@ function App() {
   }
 
   useEffect(() => {
-    const optionssss = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzNzVhZjU1ZTM2MzRiMDlhYzQzOWNiMTczMmU1OWM3MiIsIm5iZiI6MTcyNzYwNjcxNC42MTY4MDEsInN1YiI6IjY2ZDQwMmU1NGM1OWFjYTQxZGI2MmU2OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.54z46DbnrFN5yhAeTFdx9AgaZLqb8Ma8SbmaCEswvxU',
-      },
-    }
-
-    fetch(
-      `https://api.themoviedb.org/3/guest_session/${localStorage.getItem('sessionId')}/rated/movies?language=en-US&page=${currentRaited}&sort_by=created_at.asc`,
-      optionssss
-    )
-      .then((response) => {
-        if (response.status >= 400 && response.status <= 499) {
-          console.log('Извините, избранных фильмов не найдено!')
-          return []
-        }
-        if (!response.ok) {
-          throw new Error('Произошла ошибка при загрузке данных.')
-        }
-
-        return response.json()
-      })
+    getRatedFilm(currentRaited)
       .then((response) => {
         setTotalPagesRaited(response.total_results)
         return response.results
