@@ -74,7 +74,6 @@ function App() {
   }
   /// Функция для установки текущей страницы списка оцененных фильмов
   const onChangeRaited = (page) => {
-    console.log(page)
     setCurrentRaited(page)
   }
 
@@ -219,7 +218,7 @@ function App() {
             rating: element.rating,
             id: element.id,
             date: element.release_date,
-            title: cutString(element.original_title, 40),
+            title: cutString(element.original_title, 60),
             overview: cutString(element.overview, 150),
             poster: element.poster_path,
             loading: true,
