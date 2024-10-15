@@ -149,6 +149,11 @@
         display: flex;
     }
     
+    .card__classnamespiner{
+        justify-content: center; 
+        align-items: center;
+    }
+    
     .card__img{
         display: block;
         min-width: 60px;

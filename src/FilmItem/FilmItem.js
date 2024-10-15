@@ -34,9 +34,11 @@ function FilmItem({ genre, title, overview, date, poster, rated, rating, onGetRa
     formattedDate = format(newDate, 'MMMM d, yyyy')
   }
   let alert
+  let classnamespiner
   if (poster === null) {
     alert = <Alert message="Изображение отсутствует" type="warning" />
   } else if (!isLoaded) {
+    classnamespiner = 'card__classnamespiner'
     alert = <Spin size="large" />
   }
 
@@ -53,7 +55,7 @@ function FilmItem({ genre, title, overview, date, poster, rated, rating, onGetRa
 
   return (
     <section className="card">
-      <div className="card__imgbox">
+      <div className={`card__imgbox ${classnamespiner}`}>
         {alert}
         <img
           className="card__img"
