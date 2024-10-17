@@ -1,4 +1,4 @@
-export default async function getRaited(id, value) {
+export default function getRaited(id, value) {
   const options = {
     method: 'POST',
     headers: {
@@ -14,5 +14,8 @@ export default async function getRaited(id, value) {
     options
   )
     .then((response) => response.json())
+    .then((data) => {
+      return data
+    })
     .catch((err) => console.error(err))
 }

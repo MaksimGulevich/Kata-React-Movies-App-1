@@ -1,4 +1,4 @@
-export default async function getRatedFilm(currentRaited) {
+export default function getRatedFilms(currentRatedPage) {
   const optionssss = {
     method: 'GET',
     headers: {
@@ -9,14 +9,16 @@ export default async function getRatedFilm(currentRaited) {
   }
 
   return fetch(
-    `https://api.themoviedb.org/3/guest_session/${localStorage.getItem('sessionId')}/rated/movies?language=en-US&page=${currentRaited}&sort_by=created_at.asc`,
+    `https://api.themoviedb.org/3/guest_session/${localStorage.getItem('sessionId')}/rated/movies?language=en-US&page=${currentRatedPage}&sort_by=created_at.asc`,
     optionssss
   ).then((response) => {
     if (response.status >= 400 && response.status <= 499) {
       console.log('Извините, избранных фильмов не найдено!')
+      // localStorage.setItem('rated', JSON.stringify({}))
       return []
     }
     if (!response.ok) {
+      // localStorage.setItem('rated', JSON.stringify({}))
       throw new Error('Произошла ошибка при загрузке данных.')
     }
 

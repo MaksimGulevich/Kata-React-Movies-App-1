@@ -21,6 +21,10 @@ export default class GetGuestSession {
       localStorage.setItem('sessionId', sessionId)
       const dateCreation = new Date().getTime()
       localStorage.setItem('timeCreation', dateCreation)
+      if (!localStorage.getItem('ratings')) {
+        // Если его нет, записываем пустой объект
+        localStorage.setItem('rated', JSON.stringify({}))
+      }
       this.sessionId = sessionId
       // console.log('Если нет ID')
       return this.sessionId
@@ -33,6 +37,8 @@ export default class GetGuestSession {
       const sessionId = await response.guest_session_id
       localStorage.setItem('timeCreation', currentDate)
       localStorage.setItem('sessionId', sessionId)
+      localStorage.setItem('rated', JSON.stringify({}))
+
       // console.log('Если есть, но он истек ID')
       this.sessionId = sessionId
       return this.sessionId

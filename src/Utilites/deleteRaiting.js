@@ -1,4 +1,4 @@
-export default async function deleteRaited(id) {
+export default function deleteRaited(id) {
   const options = {
     method: 'DELETE',
     headers: {

@@ -11,10 +11,10 @@ import GetMovie from './Utilites/fetch'
 import Search from './Search/Search'
 import GetGuestSession from './Utilites/gestSession'
 import ButtonsSearchRaited from './ButtonsSearchRaited/ButtonsSearchRaited'
-import getRaited from './Utilites/getRaiting'
+import getRaited from './Utilites/getRaited'
 import deleteRaited from './Utilites/deleteRaiting'
 import getGenre from './Utilites/getGenre'
-import getRatedFilm from './Utilites/getRatedFilm'
+import getRatedFilms from './Utilites/getRatedFilms'
 
 window.addEventListener('load', () => {
   const handleNetworkChange = () => {
@@ -43,15 +43,22 @@ function cutString(string, number) {
 function App() {
   const [info, setInfo] = useState([])
   const [search, setSearch] = useState('')
-  const [current, setCurrent] = useState(1)
-  const [currentRaited, setCurrentRaited] = useState(1)
-  const [totalPages, setTotalPages] = useState()
+  const [currentPages, setCurrentPages] = useState(1)
+  const [currentRatedPage, setCurrentRatedPage] = useState(1)
+  const [totalSearchedPages, setTotalSearchedPages] = useState()
   const [totalPagesRaited, setTotalPagesRaited] = useState()
   const [raitedFilm, setRaitedFilm] = useState([])
   const [menu, setMenu] = useState('search')
   const [genrus, setGenre] = useState([])
-
   const valuee = useMemo(() => ({ genrus }), [genrus])
+
+  // Совершаем запрос гостевой сессии
+  useEffect(() => {
+    const gestSession = new GetGuestSession()
+
+    gestSession.getSessionId()
+  }, [])
+
   // добавление массива с жанрами
 
   useEffect(() => {
@@ -62,24 +69,8 @@ function App() {
       })
   }, [])
 
-  /// / ///////////
   useEffect(() => {
-    const gestSession = new GetGuestSession()
-
-    gestSession.getSessionId()
-  }, [])
-
-  /// Функция для установки текущей страницы списка найденных фильмов
-  const onChange = (page) => {
-    setCurrent(page)
-  }
-  /// Функция для установки текущей страницы списка оцененных фильмов
-  const onChangeRaited = (page) => {
-    setCurrentRaited(page)
-  }
-
-  useEffect(() => {
-    const movie = new GetMovie(`${search}`, `${current}`)
+    const movie = new GetMovie(`${search}`, `${currentPages}`)
 
     if (search.trim() === '') {
       setInfo([])
@@ -89,7 +80,7 @@ function App() {
     movie
       .getResource()
       .then((body) => {
-        setTotalPages(body.total_results)
+        setTotalSearchedPages(body.total_results)
         return body.results
       })
       .then((res) => {
@@ -108,7 +99,9 @@ function App() {
                 if (element.id === i.id) {
                   return i.rating
                 }
-                return null
+                return JSON.parse(localStorage.getItem('rated'))[element.id]
+                  ? JSON.parse(localStorage.getItem('rated'))[element.id]
+                  : null
               })
               .join('')
           ),
@@ -122,7 +115,7 @@ function App() {
         setInfo(newInfo)
       })
       .catch((err) => console.log(err))
-  }, [search, current])
+  }, [search, currentPages])
 
   // Создаем элемент  filmItem и задаем условие, что если данные из API получены,
   // то передаем их компоненту FilmItem
@@ -134,36 +127,42 @@ function App() {
         <FilmItem
           key={id}
           {...itemProps}
-          onGetRaiting={(v) => {
+          onGetRaiting={(ratingValue) => {
             const rait = [...info]
-            const a = rait.map((ii) => {
-              if (v > 0) {
-                if (ii.id === id) {
-                  getRaited(ii.id, v)
-                  setRaitedFilm((prev) => {
-                    const findId = prev.find((p) => p.id === ii.id)
-                    if (findId) {
-                      return prev.map((film) => (film.id === ii.id ? { ...film, rating: v } : film))
-                    }
-                    return [...prev, { ...ii, rating: v }]
-                  })
-                  setInfo((prev) => {
-                    return prev.map((film) => (film.id === ii.id ? { ...film, rating: v } : film))
-                  })
-                  return ii
+            const newRatedItems = rait.map((ratedItem) => {
+              if (ratingValue > 0) {
+                if (ratedItem.id === id) {
+                  getRaited(ratedItem.id, ratingValue)
+                  const rated = JSON.parse(localStorage.getItem('rated'))
+                  rated[ratedItem.id] = ratingValue
+                  localStorage.setItem('rated', JSON.stringify(rated))
+                  // setRaitedFilm((prev) => {
+                  //   const findId = prev.find((p) => p.id === ratedItem.id)
+                  //   if (findId) {
+                  //     return prev.map((film) => (film.id === ratedItem.id ? { ...film, rating: ratingValue } : film))
+                  //   }
+                  //   return [...prev, { ...ratedItem, rating: ratingValue }]
+                  // })
+                  // setInfo((prev) => {
+                  //   return prev.map((film) => (film.id === ratedItem.id ? { ...film, rating: ratingValue } : film))
+                  // })
+                  return ratedItem
                 }
-              } else if (ii.id === id) {
-                deleteRaited(ii.id, v)
-                setRaitedFilm((p) => {
-                  const filt = p.filter((ps) => ps.id !== ii.id)
+              } else if (ratedItem.id === id) {
+                deleteRaited(ratedItem.id)
+                const rated = JSON.parse(localStorage.getItem('rated'))
+                delete rated[ratedItem.id]
+                localStorage.setItem('rated', JSON.stringify(rated))
+                setRaitedFilm((prev) => {
+                  const filt = prev.filter((prevItem) => prevItem.id !== ratedItem.id)
                   return filt
                 })
-                return ii
+                return ratedItem
               }
-              return ii
+              return ratedItem
             })
 
-            return a
+            return newRatedItems
           }}
         />
       )
@@ -173,42 +172,39 @@ function App() {
   // Реализуем запрос из инпута и применяем debounce
   const handleChange = debounce((value) => {
     setSearch(value)
-    setCurrent(1)
+    setCurrentPages(1)
   }, 1000)
 
-  // Задаем классс и условие для пагинации
-  let clazName = 'pagination'
-  if (!filmItem || filmItem.length === 0) {
-    clazName = 'pagination_none'
-  }
-
   useEffect(() => {
-    getRatedFilm(currentRaited)
-      .then((response) => {
-        setTotalPagesRaited(response.total_results)
-        return response.results
-      })
-      .then((res) => {
-        if (res !== undefined) {
-          const newRaited = res.map((element) => ({
-            genre: element.genre_ids,
-            rated: element.vote_average.toFixed(1),
-            rating: element.rating,
-            id: element.id,
-            date: element.release_date,
-            title: cutString(element.original_title, 60),
-            overview: cutString(element.overview, 150),
-            poster: element.poster_path,
-            loading: true,
-          }))
-          setRaitedFilm(newRaited)
-        }
-      })
-      .catch((err) => console.log('Ошибка при получении данных:', err))
-  }, [
-    // raitedFilm,
-    currentRaited,
-  ])
+    // Ожидание в 1,5 секунду запрос
+    const timeoutId = setTimeout(() => {
+      getRatedFilms(currentRatedPage)
+        .then((response) => {
+          setTotalPagesRaited(response.total_results)
+          return response.results
+        })
+        .then((res) => {
+          if (res !== undefined) {
+            const newRaited = res.map((element) => ({
+              genre: element.genre_ids,
+              rated: element.vote_average.toFixed(1),
+              rating: element.rating,
+              id: element.id,
+              date: element.release_date,
+              title: cutString(element.original_title, 60),
+              overview: cutString(element.overview, 150),
+              poster: element.poster_path,
+              loading: true,
+            }))
+            setRaitedFilm(newRaited)
+          }
+        })
+        .catch((err) => console.log('Ошибка при получении данных:', err))
+    }, 1500)
+
+    // Чистка таймера, если компонент размонтируется или флаг изменится
+    return () => clearTimeout(timeoutId)
+  }, [menu, currentRatedPage])
 
   let filmRaiting
   if (raitedFilm !== null) {
@@ -218,46 +214,56 @@ function App() {
         <FilmItem
           key={id}
           {...itemProps}
-          onGetRaiting={(v) => {
+          onGetRaiting={(ratingValue) => {
             const rait = [...raitedFilm]
-            const a = rait.map((ii) => {
-              if (v > 0) {
-                if (ii.id === id) {
-                  getRaited(ii.id, v)
-                  setRaitedFilm((prev) => {
-                    const findId = prev.find((p) => p.id === ii.id)
-                    if (findId) {
-                      return prev.map((film) => (film.id === ii.id ? { ...film, rating: v } : film))
-                    }
-                    return [...prev, { ...ii, rating: v }]
-                  })
-                  if (info) {
-                    setInfo((prev) => {
-                      return prev.map((film) => (film.id === ii.id ? { ...film, rating: v } : film))
-                    })
-                  }
-                  return ii
+            const newRatedItems = rait.map((ratedItem) => {
+              if (ratingValue > 0) {
+                if (ratedItem.id === id) {
+                  getRaited(ratedItem.id, ratingValue)
+                  localStorage.setItem(`${ratedItem.id}`, ratingValue)
+                  const rated = JSON.parse(localStorage.getItem('rated'))
+                  rated[ratedItem.id] = ratingValue
+                  localStorage.setItem('rated', JSON.stringify(rated))
+                  // setRaitedFilm((prev) => {
+                  //   const findId = prev.find((p) => p.id === ratedItem.id)
+                  //   if (findId) {
+                  //     return prev.map((film) => (film.id === ratedItem.id ? { ...film, rating: ratingValue } : film))
+                  //   }
+                  //   return [...prev, { ...ratedItem, rating: ratingValue }]
+                  // })
+                  // if (info) {
+                  //   setInfo((prev) => {
+                  //     return prev.map((film) => (film.id === ratedItem.id ? { ...film, rating: ratingValue } : film))
+                  //   })
+                  // }
+                  return ratedItem
                 }
-              } else if (ii.id === id) {
-                deleteRaited(ii.id, v)
+              } else if (ratedItem.id === id) {
+                deleteRaited(ratedItem.id)
+                const rated = JSON.parse(localStorage.getItem('rated'))
+                delete rated[ratedItem.id]
+                localStorage.setItem('rated', JSON.stringify(rated))
                 if (info) {
                   setInfo((prev) => {
-                    const findId = prev.find((p) => p.id === ii.id)
+                    const findId = prev.find((prevItem) => prevItem.id === ratedItem.id)
                     if (findId) {
-                      return prev.map((film) => (film.id === ii.id ? { ...film, rating: v } : film))
+                      return prev.map((film) => (film.id === ratedItem.id ? { ...film, rating: ratingValue } : film))
                     }
                     return prev
                   })
                 }
-                setRaitedFilm((p) => {
-                  const filt = p.filter((ps) => ps.id !== ii.id)
+                setRaitedFilm((prev) => {
+                  const filt = prev.filter((prevItem) => prevItem.id !== ratedItem.id)
                   return filt
                 })
-                return ii
+                // Если удаляем элемент с n-ой страницы и он на ней последний, то нас перебрасывает
+                // на предыдущую страницу
+                setCurrentRatedPage((prev) => prev > 1 && prev - 1)
+                return ratedItem
               }
-              return ii
+              return ratedItem
             })
-            return a
+            return newRatedItems
           }}
         />
       )
@@ -268,43 +274,48 @@ function App() {
     filmRaiting = undefined
   }
 
+  // Задаем переменную для поиска найденных фильмов, либо  оцененных
+  let searchOrRatedFilms
+  // Задаем переменные для написания логики пагинации
+  let currentPage
+  let totalPages
+  let onChanges
+  // Прописываем логику для отображения найденных или оцененных фильмов, а так же логику
+  // отображения пагинации в зависимости от того, какая вкладка открыта Search или Rated
+  if (menu === 'search') {
+    searchOrRatedFilms = filmItem
+    currentPage = currentPages
+    totalPages = totalSearchedPages
+    onChanges = setCurrentPages
+  } else if (menu === 'rated') {
+    searchOrRatedFilms = filmRaiting
+    currentPage = currentRatedPage
+    totalPages = totalPagesRaited
+    onChanges = setCurrentRatedPage
+  }
+
+  // Задаем классс и условие для скрытия или отображения пагинации
+
   let clazzName = 'pagination'
-  if (!filmRaiting || filmRaiting.length === 0) {
+  if (!searchOrRatedFilms || searchOrRatedFilms.length === 0) {
     clazzName = 'pagination_none'
   }
-  let abc
-  if (menu === 'search') {
-    abc = filmItem
-  } else if (menu === 'rated') {
-    abc = filmRaiting
-  }
+
   return (
     <main className="main">
       <ButtonsSearchRaited isFilter={menu} onSearh={() => setMenu('search')} onRaited={() => setMenu('rated')} />
       {menu === 'search' && <Search onChange={handleChange} />}
       <MyContext.Provider value={valuee}>
-        <FilmList>{abc}</FilmList>
+        <FilmList>{searchOrRatedFilms}</FilmList>
       </MyContext.Provider>
-      {menu === 'rated' && (
-        <Pagination
-          defaultPageSize={20}
-          className={clazzName}
-          align="center"
-          current={currentRaited}
-          onChange={onChangeRaited}
-          total={totalPagesRaited}
-        />
-      )}
-      {menu === 'search' && (
-        <Pagination
-          defaultPageSize={20}
-          className={clazName}
-          align="center"
-          current={current}
-          onChange={onChange}
-          total={totalPages}
-        />
-      )}
+      <Pagination
+        defaultPageSize={20}
+        className={clazzName}
+        align="center"
+        current={currentPage}
+        onChange={onChanges}
+        total={totalPages}
+      />
     </main>
   )
 }
